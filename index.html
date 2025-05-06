@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dado do Destino D20</title>
+  <style>
+    body {
+      background: black;
+      color: #00ff00;
+      font-family: monospace;
+      padding: 20px;
+    }
+
+    #terminal {
+      background-color: #111;
+      padding: 20px;
+      border: 2px solid #00ff00;
+      width: 600px;
+      max-width: 90%;
+      margin: 0 auto;
+      box-shadow: 0 0 15px #00ff00;
+      text-align: center;
+    }
+
+    #output {
+      white-space: pre-wrap;
+      margin: 20px 0;
+      font-size: 18px;
+    }
+
+    button {
+      background-color: #00ff00;
+      color: black;
+      border: none;
+      padding: 10px 20px;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .dice {
+      width: 100px;
+      height: 100px;
+      margin: 20px auto;
+      perspective: 600px;
+    }
+
+    .cube {
+      width: 100px;
+      height: 100px;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: spin 2s linear;
+    }
+
+    .face {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: #00ff00;
+      color: black;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: bold;
+      border: 2px solid black;
+    }
+
+    .front  { transform: rotateY(0deg) translateZ(50px); }
+    .back   { transform: rotateY(180deg) translateZ(50px); }
+    .right  { transform: rotateY(90deg) translateZ(50px); }
+    .left   { transform: rotateY(-90deg) translateZ(50px); }
+    .top    { transform: rotateX(90deg) translateZ(50px); }
+    .bottom { transform: rotateX(-90deg) translateZ(50px); }
+
+    @keyframes spin {
+      from { transform: rotateX(0deg) rotateY(0deg); }
+      to   { transform: rotateX(720deg) rotateY(720deg); }
+    }
+  </style>
+</head>
+<body>
+  <div id="terminal">
+    <h2>DADO DO DESTINO - D20</h2>
+    <div id="output">Clique no botão <b>K1</b> para revelar seu destino...</div>
+    <button id="rollButton">K1</button>
+    <div class="dice" id="diceContainer" style="display:none;">
+      <div class="cube" id="cube">
+        <div class="face front">🎲</div>
+        <div class="face back">🎲</div>
+        <div class="face right">🎲</div>
+        <div class="face left">🎲</div>
+        <div class="face top">🎲</div>
+        <div class="face bottom">🎲</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const output = document.getElementById("output");
+    const rollButton = document.getElementById("rollButton");
+    const dice = document.getElementById("diceContainer");
+    const cube = document.getElementById("cube");
+
+    // Gera 20 futuros únicos na hora
+    const futuros = Array.from({length: 20}, (_, i) => gerarFuturoAleatorio(i + 1));
+
+    function gerarFuturoAleatorio(id) {
+      const opcoes = [
+        "Vai descobrir que é adotado... por vontade própria.",
+        "Vai viver de NFT... em 2025. Boa sorte!",
+        "Será traído pelo melhor amigo... no Free Fire.",
+        "Vai criar um p0rnhub premium... e esquecer o seu login.",
+        "Vai ser cancelado... por um tweet de 2009.",
+        "Vai ser famoso... como atriz(a) porn0.",
+        "Vai encontrar o amor... e perder o wi-fi no mesmo dia.",
+        "Vai se alistar... mas fugir com a farda.",
+        "Vai ganhar um PS6... de brinquedo.",
+        "Vai pra Marte... só de ida.",
+        "Vai rir na hora errada... e ser expulso do velório.",
+        "Vai virar lenda... entre o grupo de estranhos.",
+        "Vai pedir uma chance... e receber um policial na sua porta.",
+        "Vai entrar pro crime... o crime de roubar mais um cromossomo.",
+        "Vai virar youtuber... de cultura geek.",
+        "Vai esquecer o aniversário da mãe... e dormir fora de casa.",
+        "Vai ser preso... por zoar ruim demais, você não é engraçado.",
+        "Vai trabalhar com os de verdade... você e os seus filhos no hospital psiquiátrico.",
+        "Vai ter 3 filhos... todos da vizinha.",
+        "Vai pedir um Uber... e aparecer um jegue."
+      ];
+
+      // embaralha aleatoriamente
+      return opcoes.splice(Math.floor(Math.random() * opcoes.length), 1)[0];
+    }
+
+    rollButton.addEventListener("click", () => {
+      const numero = Math.floor(Math.random() * 20) + 1;
+      const destino = futuros[numero - 1];
+
+      output.innerHTML = `🎲 Número sorteado: <b>${numero}</b><br>🧠 Futuro: <i>${destino}</i>`;
+      cube.style.animation = "none";
+      void cube.offsetWidth; // reinicia animação
+      cube.style.animation = "spin 2s linear";
+      dice.style.display = "block";
+    });
+  </script>
+</body>
+</html>
